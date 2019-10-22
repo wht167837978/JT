@@ -1,0 +1,7 @@
+# Project exclude paths
+/jt-Cart/target/
+/jt-common/target/
+/jt-manage/target/
+/jt-order/target/
+/jt-sso/target/
+/jt-webss/target/

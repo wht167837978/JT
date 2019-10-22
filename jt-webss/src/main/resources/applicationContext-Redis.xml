@@ -1,0 +1,55 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+
+    <!--    Spring整合Redis-->
+    <!--    <bean id="Jedis" class="redis.clients.jedis.Jedis">-->
+    <!--        <constructor-arg name="host" value="${redis.host}"/>-->
+    <!--        <constructor-arg name="port" value="${redis.port}"/>-->
+    <!--    </bean>-->
+<!--pring整合分片-->
+    <bean id="PoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxTotal" value="${redis.maxTotal}"/>
+    </bean>
+        <bean id="ShardInfoA" class="redis.clients.jedis.JedisShardInfo">
+            <constructor-arg name="host" value="${redis.host}"/>
+            <constructor-arg name="port" value="${redis.port.a}"/>
+        </bean>
+        <bean id="ShardInfoB" class="redis.clients.jedis.JedisShardInfo">
+            <constructor-arg name="host" value="${redis.host}"/>
+            <constructor-arg name="port" value="${redis.port.b}"/>
+        </bean>
+        <bean id="ShardInfoC" class="redis.clients.jedis.JedisShardInfo">
+            <constructor-arg name="host" value="${redis.host}"/>
+            <constructor-arg name="port" value="${redis.port.c}"/>
+        </bean>
+        <bean name="ShardedJedisPool" class="redis.clients.jedis.ShardedJedisPool">
+            <constructor-arg name="poolConfig" ref="PoolConfig"/>
+            <constructor-arg name="shards">
+                <list>
+                    <ref bean="ShardInfoA"/>
+                    <ref bean="ShardInfoB"/>
+                    <ref bean="ShardInfoC"/>
+                </list>
+            </constructor-arg>
+        </bean>
+<!--<bean name="redis.clients.jedis.JedisSentinelPool">-->
+<!--    <constructor-arg name="masterName" value="${redis.masterName}"/>-->
+<!--    <constructor-arg name="sentinels">-->
+<!--        <set>-->
+<!--            <value>${redis.sentinel}</value>-->
+<!--        </set>-->
+<!--    </constructor-arg>-->
+<!--    <constructor-arg name="poolConfig" ref="PoolConfig"></constructor-arg>-->
+<!--</bean>-->
+
+</beans>
